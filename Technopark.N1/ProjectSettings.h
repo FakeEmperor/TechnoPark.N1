@@ -1,1 +1,1 @@
-#define _ACTIVE_PROJECT_ALGO	5
+#define _ACTIVE_PROJECT_ALGO	4

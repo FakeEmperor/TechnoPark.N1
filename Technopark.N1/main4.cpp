@@ -20,12 +20,12 @@ class stack {
 protected:
 	const static size_t multiplyer = 2;
 
-	T**					_arr;
+	T*				_arr;
 	size_t				_s, _alloc;
 
 public:
 	stack() :_arr(0), _s(0), _alloc(1) {
-		this->_arr = new T*[this->_alloc];
+		this->_arr = new T[this->_alloc];
 
 	};
 
@@ -33,39 +33,41 @@ public:
 		if (this->_s == this->_alloc)
 		{
 			this->_alloc *= stack::multiplyer;
-			T** narr = new T*[this->_alloc];
+			T* narr = new T[this->_alloc];
 			if (narr == NULL)
 				throw std::logic_error("OUT OF MEMORY");
-			//raw copy pointers
-			memcpy(narr, this->_arr, this->_s*sizeof(T*));
+			//raw copy
+			for (size_t i = 0; i < this->_s; ++i)
+				narr[i] = this->_arr[i];
 			delete[] this->_arr;
 			this->_arr = narr;
 		}
 		//add element
-		this->_arr[this->_s++] = new T(val);
+		this->_arr[this->_s++] = val;
 
 	}
 
 	T& top() {
-		return *this->_arr[this->_s - 1];
+		return this->_arr[this->_s - 1];
 	}
 
 	const T& top() const {
 
-		return *this->_arr[this->_s - 1];
+		return this->_arr[this->_s - 1];
 	}
 	void pop() {
 		//pop last element
-		delete this->_arr[--this->_s];
+		--this->_s;
 		//if number of remaining elements is lower by one compared to resize threshold
 		if (this->_alloc / (this->_s + 1) >= stack::multiplyer) {
 			//try to shrink
 			size_t al = this->_alloc / stack::multiplyer;
-			T** narr = new T*[al];
+			T* narr = new T[al];
 			if (narr != NULL) {
 				//shrink successfull
-				//copy pointers
-				memcpy(narr, this->_arr, this->_s*sizeof(T*));
+				//raw copy
+				for (int i = 0; i < this->_s; ++i)
+					narr[i] = this->_arr[i];
 				//delete old array
 				delete[] this->_arr;
 				this->_arr = narr;
@@ -76,8 +78,6 @@ public:
 	}
 
 	~stack() {
-		for (size_t i = 0; i < this->_s; ++i)
-			delete this->_arr[i];
 		delete[] this->_arr;
 	}
 

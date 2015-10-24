@@ -48,8 +48,8 @@ public:
 	
 	void in() {
 		int n = 0;
-		std::cin >> n;
-		for (int m = 0, f = 0, i = 0; n > 0; --n, ++i) {
+		int m = 0, f = 0;
+		while(!std::cin.eof()) {
 			std::cin >> m >> f;
 			initial.push_back(ipair(m, f));
 		}

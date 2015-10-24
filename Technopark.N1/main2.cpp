@@ -20,6 +20,31 @@ int* in(int n) {
 	return a;
 }
 
+int solve(int*a, int*b, int m, int n, int k) {
+	int count = 0;
+	for (int diff = 0, j = m - 1, target = 0, i = 0; i < n && j >= 0; ++i)
+	{
+		target = k - a[i];
+		diff = target - b[j];
+		if (diff < 0) {
+			//find j
+			for (; j >= 0; --j)
+			{
+				diff = target - b[j];
+				if (diff > 0)
+					break;
+				else if (!diff) {
+					++count;
+					break;
+				}
+			}
+		}
+		else if (diff == 0)
+			++count;
+	}
+	return count;
+}
+
 void die(const char* msg){
 	std::cout << msg;
 }
@@ -37,27 +62,8 @@ int main(int argc, char** argv) {
 	}
 	//int *sp = n > m ? a : b;
 	//int cn = n > m ? n : m, dl = cn - mn;
-	int count = 0;
-	for (int diff = 0, j = m - 1, target = 0, i = 0; i < n && j >= 0; ++i)
-	{
-		target = k - a[i];
-		diff = target - b[j];
-		if (diff < 0){
-			//find j
-			for (; j >= 0; --j)
-			{
-				diff = target - b[j];
-				if (diff > 0)
-					break;
-				else if (!diff) {
-					++count;
-					break;
-				}
-			}
-		}
-		else if (diff == 0)
-			++count;
-	}
+	int count = solve(a,b,m,n,k);
+	
 	std::cout << count;
 	delete a;
 	delete b;
